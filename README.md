@@ -1,18 +1,11 @@
-# DCGAN in Tensorflow
+# Deep Convolutional GAN in Tensorflow for Traffic Sings
 
-Tensorflow implementation of [Deep Convolutional Generative Adversarial Networks](http://arxiv.org/abs/1511.06434) which is a stabilize Generative Adversarial Networks. The referenced torch code can be found [here](https://github.com/soumith/dcgan.torch).
+DCGAN Tensorflow implementation of [Deep Convolutional Generative Adversarial Networks](http://arxiv.org/abs/1511.06434) was done by [Kim Taehoon](https://github.com/carpedm20). Also the huge part of this README is copied from his repo.
 
 ![alt tag](DCGAN.png)
 
 * [Brandon Amos](http://bamos.github.io/) wrote an excellent [blog post](http://bamos.github.io/2016/08/09/deep-completion/) and [image completion code](https://github.com/bamos/dcgan-completion.tensorflow) based on this repo.
 * *To avoid the fast convergence of D (discriminator) network, G (generator) network is updated twice for each D network update, which differs from original paper.*
-
-
-## Online Demo
-
-[<img src="https://raw.githubusercontent.com/carpedm20/blog/master/content/images/face.png">](http://carpedm20.github.io/faces/)
-
-[link](http://carpedm20.github.io/faces/)
 
 
 ## Prerequisites
@@ -22,99 +15,55 @@ Tensorflow implementation of [Deep Convolutional Generative Adversarial Networks
 - [SciPy](http://www.scipy.org/install.html)
 - [pillow](https://github.com/python-pillow/Pillow)
 - (Optional) [moviepy](https://github.com/Zulko/moviepy) (for visualization)
-- (Optional) [Align&Cropped Images.zip](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) : Large-scale CelebFaces Dataset
+
+## Dataset
+
+To training purposes I compiled 3 datasets (TSRD (I suppose with Japanies signs), Belgium-TSC, German-GTSRB) and extracted only speed limit signs with various numbers, stop sign, road closed, no entry for vehicular traffic.
 
 
 ## Usage
 
-First, download dataset with:
-
-    $ python download.py mnist celebA
-
 To train a model with downloaded dataset:
 
-    $ python main.py --dataset mnist --input_height=28 --output_height=28 --train
-    $ python main.py --dataset celebA --input_height=108 --train --crop
+    $ python main.py --dataset DATASET_NAME --input_height=28 --output_height=28 --train
+    or
+    $ python main.py --dataset DATASET_NAME --input_height=108 --train --crop
 
 To test with an existing model:
 
-    $ python main.py --dataset mnist --input_height=28 --output_height=28
-    $ python main.py --dataset celebA --input_height=108 --crop
-
-Or, you can use your own dataset (without central crop) by:
-
-    $ mkdir data/DATASET_NAME
-    ... add images to data/DATASET_NAME ...
-    $ python main.py --dataset DATASET_NAME --train
-    $ python main.py --dataset DATASET_NAME
-    $ # example
-    $ python main.py --dataset=eyes --input_fname_pattern="*_cropped.png" --train
-
-If your dataset is located in a different root directory:
-
-    $ python main.py --dataset DATASET_NAME --data_dir DATASET_ROOT_DIR --train
-    $ python main.py --dataset DATASET_NAME --data_dir DATASET_ROOT_DIR
-    $ # example
-    $ python main.py --dataset=eyes --data_dir ../datasets/ --input_fname_pattern="*_cropped.png" --train
-    
+    $ python main.py --dataset DATASET_NAME --input_height=28 --output_height=28
+    or
+    $ python main.py --dataset DATASET_NAME --input_height=108 --crop  
 
 ## Results
 
-![result](assets/training.gif)
+Progress of training
 
-### celebA
+![result](assets/train.gif)
+
+
+### Generated Signs
+
+![result1](assets/test.gif)
 
 After 6th epoch:
 
-![result3](assets/result_16_01_04_.png)
+![result6](assets/train_06_0107.jpg)
 
 After 10th epoch:
 
-![result4](assets/test_2016-01-27%2015:08:54.png)
+![result10](assets/train_10_0079.jpg)
 
-### Asian face dataset
+After 17th epoch:
 
-![custom_result1](web/img/change5.png)
+![result17](assets/train_17_0105.jpg)
 
-![custom_result1](web/img/change2.png)
+After 24th epoch:
 
-![custom_result2](web/img/change4.png)
-
-### MNIST
-
-MNIST codes are written by [@PhoenixDai](https://github.com/PhoenixDai).
-
-![mnist_result1](assets/mnist1.png)
-
-![mnist_result2](assets/mnist2.png)
-
-![mnist_result3](assets/mnist3.png)
-
-More results can be found [here](./assets/) and [here](./web/img/).
-
-
-## Training details
-
-Details of the loss of Discriminator and Generator (with custom dataset not celebA).
-
-![d_loss](assets/d_loss.png)
-
-![g_loss](assets/g_loss.png)
-
-Details of the histogram of true and fake result of discriminator (with custom dataset not celebA).
-
-![d_hist](assets/d_hist.png)
-
-![d__hist](assets/d__hist.png)
-
-
-## Related works
-
-- [BEGAN-tensorflow](https://github.com/carpedm20/BEGAN-tensorflow)
-- [DiscoGAN-pytorch](https://github.com/carpedm20/DiscoGAN-pytorch)
-- [simulated-unsupervised-tensorflow](https://github.com/carpedm20/simulated-unsupervised-tensorflow)
+![result24](assets/train_24_0131.jpg)
 
 
 ## Author
 
-Taehoon Kim / [@carpedm20](http://carpedm20.github.io/)
+Aleksander Lukashou / [@va9abund](https://github.com/va9abund/)
+with reference to [@carpedm20](http://carpedm20.github.io/)
