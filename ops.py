@@ -56,11 +56,9 @@ def conv2d(input_, output_dim,
     w = tf.get_variable('w', [k_h, k_w, input_.get_shape()[-1], output_dim],
               initializer=tf.truncated_normal_initializer(stddev=stddev))
     conv = tf.nn.conv2d(input_, w, strides=[1, d_h, d_w, 1], padding='SAME')
-
     biases = tf.get_variable('biases', [output_dim], initializer=tf.constant_initializer(0.0))
     conv = tf.reshape(tf.nn.bias_add(conv, biases), conv.get_shape())
-
-    return conv
+  return conv
 
 def deconv2d(input_, output_shape,
        k_h=5, k_w=5, d_h=2, d_w=2, stddev=0.02,
@@ -69,16 +67,20 @@ def deconv2d(input_, output_shape,
     # filter : [height, width, output_channels, in_channels]
     w = tf.get_variable('w', [k_h, k_w, output_shape[-1], input_.get_shape()[-1]],
               initializer=tf.random_normal_initializer(stddev=stddev))
-    
-    try:
+    #strides=[1, d_h, d_w, 1]
+    #output = tf.constant(0.1, shape=output_shape)
+    #expected = tf.nn.conv2d(output, w, strides=strides, padding='SAME')
+    #print (expected.get_shape())
+
+  try:
+      input_ = tf.constant(0.1, shape=[64, 2, 2, 512])
       deconv = tf.nn.conv2d_transpose(input_, w, output_shape=output_shape,
                 strides=[1, d_h, d_w, 1])
 
     # Support for verisons of TensorFlow before 0.7.0
-    except AttributeError:
-      deconv = tf.nn.deconv2d(input_, w, output_shape=output_shape,
+  except AttributeError:
+    deconv = tf.nn.deconv2d(input_, w, output_shape=output_shape,
                 strides=[1, d_h, d_w, 1])
-
     biases = tf.get_variable('biases', [output_shape[-1]], initializer=tf.constant_initializer(0.0))
     deconv = tf.reshape(tf.nn.bias_add(deconv, biases), deconv.get_shape())
 
