@@ -1,8 +1,7 @@
 from PIL import Image
-#from pathlib import Path
 import glob
-
-#pathlist = Path(directory_in_str).glob('data/circle/*.jpg')
+import numpy as np
+from scipy import misc, ndimage
 
 
 
@@ -10,6 +9,18 @@ def change_contrast(filepath, level):
 
     img = Image.open(filepath)
     img.load()
+
+
+
+    #img = misc.img(gray=True).astype(float)
+    blurred_f = ndimage.gaussian_filter(img, 3)	
+    filter_blurred_f = ndimage.gaussian_filter(blurred_f, 1)
+    alpha = 30
+    sharpened = blurred_f + alpha * (blurred_f - filter_blurred_f)
+
+    im = ndimage.distance_transform_bf(sharpened)
+    im_noise = im + 0.2 * np.random.randn(*im.shape)
+    im_med = ndimage.median_filter(im_noise, 3)
 
     factor = (259 * (level+255)) / (255 * (259-level))
     for x in range(img.size[0]):
@@ -20,8 +31,7 @@ def change_contrast(filepath, level):
 
     return img
 
-#for path in pathlist:
-#    path_in_str = str(path)
+
 for filepath in glob.iglob('data/circle/*.jpg'):
     result = change_contrast(filepath, 100)
     result.save(filepath)
