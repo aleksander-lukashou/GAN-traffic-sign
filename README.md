@@ -64,8 +64,8 @@ After 24th epoch:
 
 ## TODO:
 
-☑ Remove mnist related code
-1) Preprocessing of dataset: apply auto crop and brightness/contrast adjustment
+[DONE] Remove mnist related code
+1) Preprocessing of dataset: apply auto crop and [DONE] brightness/contrast adjustment
 2) Play around with networks architecture
 3) Add traffic sign classifier and compare result on "real" signes and DCGAN-generated
 
