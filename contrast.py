@@ -1,23 +1,20 @@
-from PIL import Image
+from PIL import Image, ImageEnhance
 import glob
 import numpy as np
 from scipy import misc, ndimage
-
+import cv2
 
 
 def change_contrast(filepath, level):
 
     img = Image.open(filepath)
     img.load()
-
-
-
     #img = misc.img(gray=True).astype(float)
     blurred_f = ndimage.gaussian_filter(img, 3)	
     filter_blurred_f = ndimage.gaussian_filter(blurred_f, 1)
     alpha = 30
-    sharpened = blurred_f + alpha * (blurred_f - filter_blurred_f)
 
+    sharpened = blurred_f + alpha * (blurred_f - filter_blurred_f)
     im = ndimage.distance_transform_bf(sharpened)
     im_noise = im + 0.2 * np.random.randn(*im.shape)
     im_med = ndimage.median_filter(im_noise, 3)
@@ -31,9 +28,21 @@ def change_contrast(filepath, level):
 
     return img
 
+def clahe (image_path):
+
+	bgr = cv2.imread(image_path)
+	lab = cv2.cvtColor(bgr, cv2.COLOR_BGR2LAB)
+	lab_planes = cv2.split(lab)
+	clahe = cv2.createCLAHE(clipLimit=2.0,tileGridSize=(8,8))
+	lab_planes[0] = clahe.apply(lab_planes[0])
+	lab = cv2.merge(lab_planes)
+	bgr = cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)
+	return bgr
+
 
 for filepath in glob.iglob('data/circle/*.jpg'):
     result = change_contrast(filepath, 100)
     result.save(filepath)
-
+    result = clahe(filepath)
+    cv2.imwrite(filepath, result)
 print('done')
