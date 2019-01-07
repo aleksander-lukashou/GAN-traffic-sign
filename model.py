@@ -78,23 +78,19 @@ class DCGAN(object):
     self.checkpoint_dir = checkpoint_dir
     self.data_dir = data_dir
 
-    if self.dataset_name == 'mnist':
-      self.data_X, self.data_y = self.load_mnist()
-      self.c_dim = self.data_X[0].shape[-1]
+    data_path = os.path.join(self.data_dir, self.dataset_name, self.input_fname_pattern)
+    self.data = glob(data_path)
+    if len(self.data) == 0:
+      raise Exception("[!] No data found in '" + data_path + "'")
+    np.random.shuffle(self.data)
+    imreadImg = imread(self.data[0])
+    if len(imreadImg.shape) >= 3: #check if image is a non-grayscale image by checking channel number
+      self.c_dim = imread(self.data[0]).shape[-1]
     else:
-      data_path = os.path.join(self.data_dir, self.dataset_name, self.input_fname_pattern)
-      self.data = glob(data_path)
-      if len(self.data) == 0:
-        raise Exception("[!] No data found in '" + data_path + "'")
-      np.random.shuffle(self.data)
-      imreadImg = imread(self.data[0])
-      if len(imreadImg.shape) >= 3: #check if image is a non-grayscale image by checking channel number
-        self.c_dim = imread(self.data[0]).shape[-1]
-      else:
-        self.c_dim = 1
+      self.c_dim = 1
 
-      if len(self.data) < self.batch_size:
-        raise Exception("[!] Entire dataset size is less than the configured batch_size")
+    if len(self.data) < self.batch_size:
+      raise Exception("[!] Entire dataset size is less than the configured batch_size")
     
     self.grayscale = (self.c_dim == 1)
 
@@ -175,23 +171,20 @@ class DCGAN(object):
 
     sample_z = np.random.uniform(-1, 1, size=(self.sample_num , self.z_dim))
     
-    if config.dataset == 'mnist':
-      sample_inputs = self.data_X[0:self.sample_num]
-      sample_labels = self.data_y[0:self.sample_num]
-    else:
-      sample_files = self.data[0:self.sample_num]
-      sample = [
-          get_image(sample_file,
+ 
+    sample_files = self.data[0:self.sample_num]
+    sample = [
+        get_image(sample_file,
                     input_height=self.input_height,
                     input_width=self.input_width,
                     resize_height=self.output_height,
                     resize_width=self.output_width,
                     crop=self.crop,
                     grayscale=self.grayscale) for sample_file in sample_files]
-      if (self.grayscale):
-        sample_inputs = np.array(sample).astype(np.float32)[:, :, :, None]
-      else:
-        sample_inputs = np.array(sample).astype(np.float32)
+    if (self.grayscale):
+      sample_inputs = np.array(sample).astype(np.float32)[:, :, :, None]
+    else:
+      sample_inputs = np.array(sample).astype(np.float32)
   
     counter = 1
     start_time = time.time()
@@ -315,43 +308,7 @@ class DCGAN(object):
             return tf.nn.tanh(hs[i])
 
 
-  def load_mnist(self):
-    data_dir = os.path.join(self.data_dir, self.dataset_name)
-    
-    fd = open(os.path.join(data_dir,'train-images-idx3-ubyte'))
-    loaded = np.fromfile(file=fd,dtype=np.uint8)
-    trX = loaded[16:].reshape((60000,28,28,1)).astype(np.float)
-
-    fd = open(os.path.join(data_dir,'train-labels-idx1-ubyte'))
-    loaded = np.fromfile(file=fd,dtype=np.uint8)
-    trY = loaded[8:].reshape((60000)).astype(np.float)
-
-    fd = open(os.path.join(data_dir,'t10k-images-idx3-ubyte'))
-    loaded = np.fromfile(file=fd,dtype=np.uint8)
-    teX = loaded[16:].reshape((10000,28,28,1)).astype(np.float)
-
-    fd = open(os.path.join(data_dir,'t10k-labels-idx1-ubyte'))
-    loaded = np.fromfile(file=fd,dtype=np.uint8)
-    teY = loaded[8:].reshape((10000)).astype(np.float)
-
-    trY = np.asarray(trY)
-    teY = np.asarray(teY)
-    
-    X = np.concatenate((trX, teX), axis=0)
-    y = np.concatenate((trY, teY), axis=0).astype(np.int)
-    
-    seed = 547
-    np.random.seed(seed)
-    np.random.shuffle(X)
-    np.random.seed(seed)
-    np.random.shuffle(y)
-    
-    y_vec = np.zeros((len(y), self.y_dim), dtype=np.float)
-    for i, label in enumerate(y):
-      y_vec[i,y[i]] = 1.0
-    
-    return X/255.,y_vec
-
+  
   @property
   def model_dir(self):
     return "{}_{}_{}_{}".format(
