@@ -41,8 +41,11 @@ def clahe (image_path):
 
 
 for filepath in glob.iglob('data/circle/*.jpg'):
-    result = change_contrast(filepath, 100)
-    result.save(filepath)
+
     result = clahe(filepath)
     cv2.imwrite(filepath, result)
+
+    result = change_contrast(filepath, 180)
+    result.save(filepath)
+
 print('done')
