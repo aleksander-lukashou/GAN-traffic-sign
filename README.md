@@ -15,6 +15,7 @@ DCGAN Tensorflow implementation of [Deep Convolutional Generative Adversarial Ne
 - [SciPy](http://www.scipy.org/install.html)
 - [pillow](https://github.com/python-pillow/Pillow)
 - (Optional) [moviepy](https://github.com/Zulko/moviepy) (for visualization)
+- (I faced issue while using 1.16.0, so I rolled back to 1.15.4)[NumPy] 
 
 ## Dataset
 
