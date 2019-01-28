@@ -37,11 +37,11 @@ To test with an existing model:
     $ python main.py --dataset DATASET_NAME --input_height=108 --crop  
 
 ## Results
-
 Progress of training
 
-![result](assets/train.gif)
-
+Basic dataset             |  Blue Cirle dataset
+:-------------------------:|:-------------------------:
+![result](assets/train.gif)  |  ![blueres](assets/bluetrain.gif)
 
 ### Generated Signs
 
