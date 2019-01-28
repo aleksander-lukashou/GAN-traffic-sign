@@ -42,7 +42,7 @@ def clahe (image_path):
 	return bgr
 
 
-for filepath in glob.iglob('data/januaryCircle/*.jpg'):
+for filepath in glob.iglob('data/blueCircle/*.jpg'):
 
     result = change_contrast(filepath, 150)
     #result.save(filepath)
