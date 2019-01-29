@@ -39,13 +39,15 @@ To test with an existing model:
 ## Results
 Progress of training
 
-Basic dataset             |  Blue Cirle dataset
-:-------------------------:|:-------------------------:
-![result](assets/train.gif)  |  ![blueres](assets/bluetrain.gif)
+Basic dataset             |  Blue Cirle dataset | Blue Circle with preprocessing 
+:--------------------:|:--------------------:|:--------------------:
+![result](assets/train.gif)  |  ![blueres](assets/bluetrain.gif) | ![newblue](assets/newTrainBlue.gif)
 
 ### Generated Signs
 
-![result1](assets/test.gif)
+Basic dataset             |  Blue Cirle dataset | Blue Circle with preprocessing 
+:--------------------:|:--------------------:|:--------------------:
+![res](assets/test.gif)  |  ![blueres](assets/testblue.gif) | ![newblue](assets/newTestBlue.gif)
 
 After 6th epoch:
 
