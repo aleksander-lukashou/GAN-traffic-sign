@@ -109,3 +109,21 @@ def extract_images():
             img = x[i]
             img = Image.fromarray(img)
             img.save(file)
+
+def load_images(data_set):
+    image_files = os.path.join(config.IMAGES_DIR, data_set, LOAD_PNG_PATTERN)
+    if len(glob.glob(image_files)) == 0:
+        extract_images()
+
+    # Sort file names in alphabetical order to line up with labels
+    files = glob.glob(image_files)
+    files.sort()
+
+    # Load images and save in X matrix. Convert to numpy array.
+    x = []
+    for file in files:
+        img = Image.open(file)
+        x.append(np.asarray(img.copy()))
+        img.close()
+    x = np.array(x)
+    return x	

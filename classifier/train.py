@@ -44,8 +44,8 @@ x_train, x_val, y_train, y_val = train_test_split(x, y, random_state=0,
 shape = x.shape[1:]
 num_classes = config.NUM_CLASSES
 learning_rate = 0.001
-batch_size = 512
-epochs = 10
+batch_size = 16
+epochs = 15
 
 # Class number to classification columns (categorical to dummy variables)
 y_train = np_utils.to_categorical(y_train, num_classes)
